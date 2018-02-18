@@ -1,5 +1,6 @@
-package valcus.roundtable.gameLogic
+package valcus.roundtable.gameLogic.entities
 
+import valcus.roundtable.gameLogic.RoleReference
 import java.util.*
 
 /**
@@ -8,10 +9,12 @@ import java.util.*
 
 class Player {
 
+    //todo does player implement client?
+
     internal var playerId: UUID = UUID.randomUUID()
     var role: Int? = null
         set(value) {
-            alignment = RoleInformation.getAlignment(value)
+            alignment = RoleReference.getAlignment(value)
             field = value
         }
     var alignment: Int = 0

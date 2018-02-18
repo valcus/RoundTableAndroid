@@ -1,14 +1,14 @@
 package valcus.roundtable.server
 
 import valcus.roundtable.gameLogic.*
+import valcus.roundtable.gameLogic.entities.Player
+import valcus.roundtable.gameLogic.entities.Server
+import valcus.roundtable.gameLogic.entities.Vote
 
 /**
  * Created by Tim Shimp on 2/17/2018.
  */
 class DummyServer : Server {
-    override fun connect() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun getGameList(): MutableList<Game> {
         val gameList : MutableList<Game> = ArrayList<Game>()

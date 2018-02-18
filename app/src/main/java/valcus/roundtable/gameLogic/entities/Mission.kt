@@ -1,4 +1,4 @@
-package valcus.roundtable.gameLogic
+package valcus.roundtable.gameLogic.entities
 
 /**
  * Created by Tim Shimp on 2/17/2018.

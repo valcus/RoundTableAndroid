@@ -1,5 +1,8 @@
 package valcus.roundtable.gameLogic
 
+import valcus.roundtable.gameLogic.entities.Mission
+import valcus.roundtable.gameLogic.entities.Player
+import valcus.roundtable.gameLogic.entities.Server
 import valcus.roundtable.server.ServerFactory
 import java.util.*
 
@@ -16,6 +19,8 @@ class Game (numberOfPlayers: Int, availableRoles: MutableList<Int>){
     private val missions: MutableList<Mission> = ArrayList<Mission>()
     private val availableRoles: MutableList<Int>
     private val server: Server = ServerFactory.getServer()
+    private val rand = Random()
+    private var leader = -1
 
     init {
         this.availableRoles = availableRoles
@@ -33,14 +38,20 @@ class Game (numberOfPlayers: Int, availableRoles: MutableList<Int>){
 //    }
 
     fun addPlayer(player: Player) {
-        val rand = Random()
         val roleIndex = rand.nextInt(availableRoles.size)
         player.role = availableRoles[roleIndex]
         availableRoles.removeAt(roleIndex)
         players.add(player)
+        if(players.size == maxPlayers) {
+            gameStart()
+        }
     }
 
     fun gameStart() {
+        leader = rand.nextInt(maxPlayers)
+    }
 
+    interface pickResultHnadler {
+        fun getPicks()
     }
 }

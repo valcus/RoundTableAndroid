@@ -1,4 +1,4 @@
-package valcus.roundtable.Activites
+package valcus.roundtable.Client
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

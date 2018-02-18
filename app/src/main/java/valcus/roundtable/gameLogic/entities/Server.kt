@@ -1,11 +1,11 @@
-package valcus.roundtable.gameLogic
+package valcus.roundtable.gameLogic.entities
+
+import valcus.roundtable.gameLogic.Game
 
 /**
  * Created by Tim Shimp on 2/17/2018.
  */
 interface Server {
-
-    fun connect()
 
     fun getGameList(): List<Game>
 
@@ -17,7 +17,9 @@ interface Server {
 
     fun getMissionResult(): List<Vote>
 
+    fun setMissionResultHandler(resultHandler: (List<Vote>) -> Any)
+
     fun getMissionPicks(): List<Player>?
 
-    fun getRole(): List<Player>
+    fun createGame(game: Game, player: Player)
 }

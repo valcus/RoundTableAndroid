@@ -1,4 +1,4 @@
-package valcus.roundtable.gameLogic
+package valcus.roundtable.gameLogic.entities
 
 import java.util.*
 

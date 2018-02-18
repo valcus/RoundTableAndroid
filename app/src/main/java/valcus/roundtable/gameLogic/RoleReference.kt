@@ -8,7 +8,7 @@ const val ROLE_EVIL = 1
 const val ROLE_COMMANDER = 2
 const val ROLE_ASSASSIN = 3
 
-object RoleInformation{
+object RoleReference {
     fun knows(me: Int, them: Int) = when(me) {
         ROLE_GOOD -> false
         ROLE_EVIL, ROLE_ASSASSIN -> when(them) {

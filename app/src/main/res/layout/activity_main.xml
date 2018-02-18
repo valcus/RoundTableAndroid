@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="valcus.roundtable.Activites.MainActivity">
+    tools:context="valcus.roundtable.Client.MainActivity">
 
     <TextView
         android:id="@+id/title"
