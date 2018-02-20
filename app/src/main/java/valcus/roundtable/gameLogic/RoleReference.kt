@@ -3,12 +3,13 @@ package valcus.roundtable.gameLogic
 /**
  * Created by Tim Shimp on 2/17/2018.
  */
-const val ROLE_GOOD = 0
-const val ROLE_EVIL = 1
-const val ROLE_COMMANDER = 2
-const val ROLE_ASSASSIN = 3
 
 object RoleReference {
+    const val ROLE_GOOD = 0
+    const val ROLE_EVIL = 1
+    const val ROLE_COMMANDER = 2
+    const val ROLE_ASSASSIN = 3
+
     fun knows(me: Int, them: Int) = when(me) {
         ROLE_GOOD -> false
         ROLE_EVIL, ROLE_ASSASSIN -> when(them) {

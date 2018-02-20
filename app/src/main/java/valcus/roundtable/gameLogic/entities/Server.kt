@@ -15,11 +15,9 @@ interface Server {
 
     fun pick(pick: List<Player>)
 
-    fun getMissionResult(): List<Vote>
+    fun getPickVotes(mission: Mission): List<Vote>
 
-    fun setMissionResultHandler(resultHandler: (List<Vote>) -> Any)
+    fun sendMission(mission: Mission): Mission
 
-    fun getMissionPicks(): List<Player>?
-
-    fun createGame(game: Game, player: Player)
+    fun getMissionPicks(leader : Player): Mission
 }

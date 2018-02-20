@@ -7,7 +7,7 @@ import java.util.*
  * Created by Tim Shimp on 2/17/2018.
  */
 
-class Player {
+class Player (client: Client) {
 
     //todo does player implement client?
 
@@ -19,4 +19,13 @@ class Player {
         }
     var alignment: Int = 0
     var displayName: String? = null
+    val client: Client
+
+    init {
+        this.client = client
+    }
+
+//    fun getMissionPick(): List<Player> {
+//
+//    }
 }

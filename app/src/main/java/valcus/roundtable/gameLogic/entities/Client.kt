@@ -9,5 +9,15 @@ interface Client {
 
     fun onMissionFinished(passed: Boolean)
 
-    fun onPick(picks: List<Player>)
+    fun onMission(): MissionResult
+
+    fun getAccusation(): Player
+
+    fun onGameEnd(goodWin: Boolean)
+
+    fun onPick(picks: List<Player>): Vote
+
+    fun getPick(): Mission
+
+    fun setRole(role: Int, knowsAbout: List<Player>)
 }
