@@ -17,7 +17,13 @@ interface Server {
 
     fun getPickVotes(mission: Mission): List<Vote>
 
-    fun sendMission(mission: Mission): Mission
+    fun sendMission(mission: Mission): List<MissionResult>
 
     fun getMissionPicks(leader : Player): Mission
+
+    fun getAssassinGuess(assassin: Player?): Player
+
+    fun gameEnded(winner: MissionResult)
+
+    fun sendInfo(players: List<Player>)
 }

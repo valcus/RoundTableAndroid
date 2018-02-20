@@ -1,25 +1,25 @@
 package valcus.roundtable.gameLogic
 
 import valcus.roundtable.gameLogic.entities.*
-import valcus.roundtable.server.ServerFactory
 import java.util.*
 
 /**
  * Created by Tim Shimp on 2/17/2018.
  */
 
-class Game (settings: GameSettings){
+class Game (settings: GameSettings, server: Server){
 
     private val players: MutableList<Player> = ArrayList<Player>()
     private val missions: MutableList<Mission> = ArrayList<Mission>()
     private val settings: GameSettings
-    private val server: Server = ServerFactory.getServer()
+    private val server: Server
     private val rand = Random()
     private var leader = -1
     private var gameEnded: Boolean = false
 
     init {
         this.settings = settings
+        this.server = server
     }
 
     fun addPlayer(player: Player) {
@@ -32,7 +32,7 @@ class Game (settings: GameSettings){
         }
     }
 
-    fun gameStart() {
+    private fun gameStart() {
         setupPhase()
         while (!gameEnded) {
             mainLoop()
@@ -40,7 +40,7 @@ class Game (settings: GameSettings){
         endPhase()
     }
 
-    fun mainLoop() {
+    private fun mainLoop() {
         val mission = pickPhase()
         if (!gameEnded) {
             missionPhase(mission)
@@ -50,13 +50,24 @@ class Game (settings: GameSettings){
         }
     }
 
-    fun setupPhase() {
+    private fun setupPhase() {
         leader = rand.nextInt(settings.availableRoles.size)
-        //assign roles here?
+        //get role info
+        for(p in players) {
+            val knownPlayers: MutableList<Player> = ArrayList<Player>()
+            for (p2 in players) {
+                if (Role.knows(p.role, p2.role)) {
+                    knownPlayers.add(p2)
+                }
+            }
+            p.knowsAbout = knownPlayers
+        }
+        server.sendInfo(players)
     }
 
-    fun pickPhase() : Mission {
-        var pick: Mission? = null
+    private fun pickPhase() : Mission {
+        //todo determine how many get sent here?
+        var pick: Mission?
         var pickCounter = 1
 
         while (pickCounter < 5) {
@@ -64,25 +75,69 @@ class Game (settings: GameSettings){
             if (pick != null) {
                 return pick
             }
+            pickCounter += 1
         }
         endGame()
         return Mission(ArrayList<Player>())
     }
 
-    fun missionPhase(missionToSend: Mission) {
-        val sentMission = server.sendMission(missionToSend)
+    private fun missionPhase(sentMission: Mission) {
+        val missionResults = server.sendMission(sentMission)
+
+        //todo improve mission result check
+        if(missionResults.contains(MissionResult.FAIL)) {
+            sentMission.result = MissionResult.FAIL
+        } else {
+            sentMission.result = MissionResult.PASS
+        }
+
         missions.add(sentMission)
+
+        val passingMissions = missions.filter { it.result == MissionResult.PASS }
+        val failingMissions = missions.filter { it.result == MissionResult.FAIL }
+        if (failingMissions.size == 3 || passingMissions.size == 3) {
+            endGame()
+        }
     }
 
-    fun infoPhase() {
+    private fun infoPhase() {
         //todo placeholder for lady, defectors, plots and whatnot
     }
 
-    fun endPhase() {
-        //todo determine who won
+    private fun endPhase() {
+        var gameResult: MissionResult
+        var missionSuccesses = 0
+        var missionFailures = 0
+        for(m in missions) {
+            if (m.result == MissionResult.PASS) {
+                missionSuccesses += 1
+            } else {
+                missionFailures += 1
+            }
+        }
+
+        if (missionSuccesses >= 3) {
+            //assassin guesses commander
+            if (settings.availableRoles.contains(Role.ASSASSIN)) {
+               val guess : Player = server.getAssassinGuess(players.find { it.role == Role.ASSASSIN })
+
+                if (guess.role == Role.COMMANDER) {
+                    gameResult = MissionResult.FAIL
+                } else {
+                    gameResult = MissionResult.PASS
+                }
+            } else {
+                gameResult = MissionResult.PASS
+            }
+        } else {
+            gameResult = MissionResult.FAIL
+        }
+
+        server.gameEnded(gameResult)
     }
 
-    fun pickMission(voteNum: Int): Mission? {
+    private fun pickMission(voteNum: Int): Mission? {
+        //todo how many players does the leader pick?
         val pick = server.getMissionPicks(players[leader])
 
         val missionVotes = server.getPickVotes(pick)
@@ -109,7 +164,7 @@ class Game (settings: GameSettings){
 
     }
 
-    fun endGame() {
+    private fun endGame() {
         gameEnded = true
     }
 }
