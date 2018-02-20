@@ -13,11 +13,11 @@ class DummyServer : Server {
 //    override fun getGameList(): MutableList<Game> {
 //        val gameList : MutableList<Game> = ArrayList<Game>()
 //        val roleList : MutableList<Int> = ArrayList<Int>()
-//        roleList.add(RoleReference.ROLE_EVIL)
-//        roleList.add(RoleReference.ROLE_ASSASSIN)
-//        roleList.add(RoleReference.ROLE_GOOD)
-//        roleList.add(RoleReference.ROLE_GOOD)
-//        roleList.add(RoleReference.ROLE_COMMANDER)
+//        roleList.add(Role.EVIL)
+//        roleList.add(Role.ASSASSIN)
+//        roleList.add(Role.GOOD)
+//        roleList.add(Role.GOOD)
+//        roleList.add(Role.COMMANDER)
 //        gameList.add(Game(5, roleList))
 //        return gameList
 //    }
