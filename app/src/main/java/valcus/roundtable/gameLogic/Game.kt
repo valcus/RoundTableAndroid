@@ -66,30 +66,24 @@ class Game (settings: GameSettings, server: Server){
     }
 
     private fun pickPhase() : Mission {
-        //todo determine how many get sent here?
-        var pick: Mission?
+        var pick = Mission(getNumOfPlayersToSend())
         var pickCounter = 1
 
         while (pickCounter < 5) {
-            pick = pickMission(pickCounter)
-            if (pick != null) {
+            pick = pickMission(pick)
+            if (pick.players.isEmpty()) {
                 return pick
             }
             pickCounter += 1
         }
         endGame()
-        return Mission(ArrayList<Player>())
+        return Mission(0)
     }
 
     private fun missionPhase(sentMission: Mission) {
         val missionResults = server.sendMission(sentMission)
 
-        //todo improve mission result check
-        if(missionResults.contains(MissionResult.FAIL)) {
-            sentMission.result = MissionResult.FAIL
-        } else {
-            sentMission.result = MissionResult.PASS
-        }
+        sentMission.result = getMissionResult(missionResults)
 
         missions.add(sentMission)
 
@@ -136,9 +130,8 @@ class Game (settings: GameSettings, server: Server){
         server.gameEnded(gameResult)
     }
 
-    private fun pickMission(voteNum: Int): Mission? {
-        //todo how many players does the leader pick?
-        val pick = server.getMissionPicks(players[leader])
+    private fun pickMission(mission: Mission): Mission {
+        val pick = server.getMissionPicks(players[leader], mission)
 
         val missionVotes = server.getPickVotes(pick)
 
@@ -160,11 +153,77 @@ class Game (settings: GameSettings, server: Server){
         if (missionApproved) {
             return pick
         }
-        return null
+
+        mission.players.clear()
+        return mission
 
     }
 
     private fun endGame() {
         gameEnded = true
+    }
+
+    private fun getNumOfPlayersToSend() = when (missions.size) {
+        0 -> {
+            when (settings.availableRoles.size) {
+                5, 6, 7 -> 2
+                8, 9, 10 -> 3
+                else -> -1
+            }
+        }
+        1 -> {
+            when (settings.availableRoles.size) {
+                5, 6, 7 -> 3
+                8, 9 , 10 -> 4
+                else -> -1
+            }
+        }
+        2 -> {
+            when (settings.availableRoles.size) {
+                5 -> 2
+                7 -> 3
+                6, 8, 9, 10 -> 4
+                else -> -1
+            }
+        }
+        3 -> {
+            when (settings.availableRoles.size) {
+                5, 6 -> 3
+                7 -> 4
+                8, 9, 10 -> 5
+                else -> -1
+            }
+        }
+        4 -> {
+            when (settings.availableRoles.size) {
+                5 -> 3
+                6, 7 -> 4
+                8, 9, 10 -> 5
+                else -> -1
+            }
+        }
+        else -> -1
+    }
+
+    private fun getMissionResult(results: List<MissionResult>) : MissionResult {
+        var missionResult: MissionResult = MissionResult.PASS
+
+        if (missions.size == 3 && settings.availableRoles.size > 6) {
+            var failCount = 0
+            for (m in results){
+                if (m == MissionResult.FAIL) {
+                    failCount += 1
+                }
+            }
+            if (failCount >= 2) {
+                missionResult = MissionResult.FAIL
+            }
+        } else {
+            if (results.contains(MissionResult.FAIL)) {
+                missionResult = MissionResult.FAIL
+            }
+        }
+
+        return missionResult
     }
 }

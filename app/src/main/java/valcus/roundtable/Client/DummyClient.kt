@@ -1,50 +1,40 @@
-package valcus.roundtable.server
+package valcus.roundtable.Client
 
-import valcus.roundtable.gameLogic.*
 import valcus.roundtable.gameLogic.entities.*
 
 /**
- * Created by Tim Shimp on 2/17/2018.
+ * Created by Tim Shimp on 2/20/2018.
  */
-class DummyServer : Server {
-
-    override fun getGameList(): List<Game> {
+class DummyClient : Client {
+    override fun onVoteFinsihed(accepted: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun joinGame(game: Game, me: Player) {
+    override fun onMissionFinished(passed: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun vote(myVote: Vote) {
+    override fun onMission(): MissionResult {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun pick(pick: List<Player>) {
+    override fun getAccusation(): Player {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getPickVotes(mission: Mission): List<Vote> {
+    override fun onGameEnd(goodWin: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun sendMission(mission: Mission): List<MissionResult> {
+    override fun onPick(picks: List<Player>): Vote {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getMissionPicks(leader: Player, mission: Mission): Mission {
+    override fun getPick(): Mission {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAssassinGuess(assassin: Player?): Player {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun gameEnded(winner: MissionResult) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun sendInfo(players: List<Player>) {
+    override fun setRole(role: Int, knowsAbout: List<Player>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

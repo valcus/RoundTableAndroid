@@ -19,7 +19,7 @@ interface Server {
 
     fun sendMission(mission: Mission): List<MissionResult>
 
-    fun getMissionPicks(leader : Player): Mission
+    fun getMissionPicks(leader : Player, mission: Mission): Mission
 
     fun getAssassinGuess(assassin: Player?): Player
 
