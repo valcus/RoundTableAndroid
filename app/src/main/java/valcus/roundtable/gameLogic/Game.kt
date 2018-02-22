@@ -69,9 +69,9 @@ class Game (settings: GameSettings, server: Server){
         var pick = Mission(getNumOfPlayersToSend())
         var pickCounter = 1
 
-        while (pickCounter < 5) {
+        while (pickCounter <= 5) {
             pick = pickMission(pick)
-            if (pick.players.isEmpty()) {
+            if (!pick.players.isEmpty()) {
                 return pick
             }
             pickCounter += 1
